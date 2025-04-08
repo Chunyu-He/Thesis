@@ -11,8 +11,8 @@
 %
 
 \NeedsTeXFormat{LaTeX2e}[2017/04/15]
-\newcommand\ustcthesisversion{4.0.0-beta.6}
-\ProvidesClass{ustcthesis}[2025/02/25 v\ustcthesisversion\space USTC thesis template]
+\newcommand\ustcthesisversion{4.0.0-beta.7}
+\ProvidesClass{ustcthesis}[2025/04/07 v\ustcthesisversion\space USTC thesis template]
 
 % 报错和警告
 \newcommand\ustc@error[1]{%
@@ -2294,9 +2294,8 @@
 % 各章标题，例如：“第1章  引言”。
 % 章序号采用阿拉伯数字，章序号与标题之间空一个汉字符，采用黑体三号字，居中书写，单倍行距，段前24磅，段后18磅。
 % 摘要、目录和列于目录中与章平级的其它部分的标题（如参考文献、附录、致谢等）也用这同一种格式。
-
-% 注意 \pkg{ctex} v2.4.3 以下版本的bug会导致章节标题前后的距离的实际值偏大。
-% 另外 \pkg{ctex} v2.2 前的beforeskip的符号有特殊意义。
+% 由于 LaTeX 的排版方式与 Word 不同，为了效果与 Word 模板一致，
+% 将段前、段后分别修正为 7bp 和 19bp。
 \ctexset{
   chapter = {
     format      = \centering\heiti\fontsize{16bp}{20.8bp}\selectfont,
@@ -2304,9 +2303,9 @@
     titleformat = {},
     number      = \thechapter,
     aftername   = \quad,
-    beforeskip  = 24bp,
-    afterskip   = 18bp,
-    fixskip     = true,
+    beforeskip  = 7bp,
+    afterskip   = 19bp,
+    % fixskip     = true,
   },
 }
 
@@ -2341,29 +2340,7 @@
     afterskip  = 6bp,
   },
   %
-  % 按照 Word 模板的格式，四级节标题：宋体 12 磅，左缩进两字，行距 20 磅，
-  % 段前段后 0 磅，序号使用全宽括号，与题名间空半字宽。
-  paragraph = {
-    format     = \rmfamily\fontsize{12bp}{20bp}\selectfont,
-    number     = （\arabic{paragraph}）,
-    aftername  = \hspace{0.5em},
-    indent     = 2em,
-    beforeskip = 0bp,
-    afterskip  = 0bp,
-    runin      = false,
-  },
-  %
-  % 按照 Word 模板的格式，五级节标题：宋体 12 磅，左缩进两字，行距 20 磅，
-  % 段前段后 0 磅，序号使用全宽括号，与题名间空半字宽。
-  subparagraph = {
-    format     = \rmfamily\fontsize{12bp}{20bp}\selectfont,
-    number     = \ustc@textcircled{subparagraph},
-    aftername  = \hspace{0.5em},
-    indent     = 2em,
-    beforeskip = 0bp,
-    afterskip  = 0bp,
-    runin      = false,
-  },
+  % 研究生要求不得使用三级以下节标题
 }
 
 \ifustc@degree@bachelor
@@ -2414,8 +2391,12 @@
     },
     paragraph = {
       format    = \rmfamily\fontsize{12bp}{22bp}\selectfont,
+      number     = （\arabic{paragraph}）,
       aftername = {},
       indent    = 1em,
+      beforeskip = 0bp,
+      afterskip  = 0bp,
+      runin      = false,
     },
   }
   %
@@ -2485,8 +2466,16 @@
   \ustcsetup{language=chinese}%
   \ustc@chapter{摘要}%
 }{
-  \par\null\par\noindent\hangindent=4em\relax
-  \textbf{关键词}：\ustc@keywords@text\par
+  \par\null\par
+  \setlength\hangindent{4em}%
+  \noindent
+  \textbf{关键词：}%
+  \ifustc@degree@graduate
+    \ustc@clist@use{\ustc@keywords@en}{, }%
+  \else
+    \ustc@clist@use{\ustc@keywords@en}{; }%
+  \fi
+  \par
   \ustc@reset@main@language
 }
 
@@ -2500,7 +2489,11 @@
   \ustcsetup{language=english}%
   \ifustc@degree@graduate
     \ctexset{
-      chapter/format = \centering\bfseries\fontsize{16bp}{26.67bp}\selectfont,
+      chapter = {
+        format = \centering\bfseries\fontsize{16bp}{18.4bp}\selectfont,
+        beforeskip = 9bp,
+        afterskip = 17bp,
+      }
     }%
     \ustc@chapter{ABSTRACT}%
   \else
@@ -2510,19 +2503,14 @@
       \ustc@chapter{ABSTRACT}%
     \endgroup
   \fi
-  \setlength{\parindent}{1em}%
 }{
-  \par\null\par\noindent
+  \par\null\par
   \ifustc@degree@bachelor
     \renewcommand\ustc@keywords@label{Key Words}%
   \fi
-  \savebox\ustc@keywords@box{\textbf{\ustc@keywords@label}: }%
-  \ustc@keywords@width=\linewidth
-  \advance\ustc@keywords@width-\wd\ustc@keywords@box
-  \textbf{\ustc@keywords@label}: \parbox[t]{\ustc@keywords@width}{\ustc@keywords@en@text\par}\par
-  \ifustc@degree@graduate
-    \cleardoublepage
-  \fi
+  \setlength\hangindent{6.5em}%
+  \noindent
+  \textbf{\ustc@keywords@label}: \ustc@keywords@en@text\par
   \ustc@reset@main@language
 }
 
@@ -2565,31 +2553,29 @@
 % 带有序号的各级标题，其序号与题名之间均空一字符，行末右顶格。
 \ifustc@degree@graduate
   \titlecontents{chapter}
-    [0bp]{\addvspace{6bp}\heiti\normalsize}
-    {\contentspush{\thecontentslabel\hspace{\ccwd}}}{}
-    {\bfseries\normalsize\ustc@leaders\thecontentspage}
-    %
+    [0bp]{\addvspace{6bp}\heiti}
+    {\contentspush{\thecontentslabel\quad}}{}
+    {\bfseries\ustc@leaders\thecontentspage}
   \titlecontents{section}
-    [1em]{\normalsize}
+    [1em]{}
     {\contentspush{\thecontentslabel\quad}}{}
     {\ustc@leaders\thecontentspage}
-    %
   \titlecontents{subsection}
-    [2em]{\normalsize}
+    [2em]{}
     {\contentspush{\thecontentslabel\quad}}{}
     {\ustc@leaders\thecontentspage}
 \else
   % 本科生的目录使用小四宋体（同正文字体），其他同研究生的格式相近。
   \titlecontents{chapter}
-    [0bp]{\normalsize}
-    {\contentspush{\thecontentslabel\unskip\quad}}{}
+    [0bp]{}
+    {\contentspush{\thecontentslabel\quad}}{}
     {\ustc@leaders\thecontentspage}
   \titlecontents{section}
-    [1em]{\normalsize}
+    [1em]{}
     {\contentspush{\thecontentslabel\quad}}{}
     {\ustc@leaders\thecontentspage}
   \titlecontents{subsection}
-    [2em]{\normalsize}
+    [2em]{}
     {\contentspush{\thecontentslabel
       \ifustc@section@style@arabic\quad\else 、\fi}}{}
     {\ustc@leaders\thecontentspage}
@@ -2620,41 +2606,28 @@
   \secdef\@chapter\@schapter
 }
 
-% 研究生要求图、表的清单须另页起。
-\newlength{\ustc@lof@label@width}
-\newcommand\ustc@set@lof@format{%
-  \settowidth{\ustc@lof@label@width}{\figurename~9.99}%
-  \addtolength{\ustc@lof@label@width}{1em}%
-  \titlecontents{figure}%
-    [\ustc@lof@label@width]{\normalsize}%
-    {\contentslabel[\figurename~\thecontentslabel]{\ustc@lof@label@width}}{}%
-    {\ustc@leaders\thecontentspage}%
-  \titlecontents{table}%
-    [\ustc@lof@label@width]{\normalsize}%
-    {\contentslabel[\tablename~\thecontentslabel]{\ustc@lof@label@width}}{}%
-    {\ustc@leaders\thecontentspage}%
-}
-\ustc@set@lof@format
-\ustc@option@hook{main-language}{\ustc@set@lof@format}
+% 插图和附表清单
+\titlecontents{figure}
+  [0bp]{}
+  {\contentspush{\thecontentslabel\quad}}{}
+  {\ustc@leaders\thecontentspage}
+
+\titlecontents{table}
+  [0bp]{}
+  {\contentspush{\thecontentslabel\quad}}{}
+  {\ustc@leaders\thecontentspage}
+
 \renewcommand\listoffigures{%
-  \ifustc@degree@graduate
-    \cleardoublepage
-  \fi
   \ustc@chapter{\listfigurename}%
   \@starttoc{lof}%
 }
+
 \renewcommand\listoftables{%
-  \ifustc@degree@graduate
-    \cleardoublepage
-  \fi
   \ustc@chapter{\listtablename}%
   \@starttoc{lot}%
 }
 
 \newcommand\listoffiguresandtables{%
-  \ifustc@degree@graduate
-    \cleardoublepage
-  \fi
   \ustc@chapter{\ustc@list@figure@table@name}%
   \@starttoc{lof}%
   \@starttoc{lot}%
@@ -2665,16 +2638,9 @@
 
 % 研究生规定符号说明另页起，标题字体字号等同论文正文，
 \newenvironment{notation}{%
-  \ifustc@degree@graduate
-    \cleardoublepage
-  \fi
   \ustc@chapter{\ustc@notation@name}%
-}{%
-  \ifustc@degree@graduate
-    \clearpage
-    \pagestyle{plain}%
-  \fi
-}%
+}{}%
+
 \newcommand*\notationlabel[1]{#1\hfil}%
 \newenvironment{notationlist}[1]{%
   \list{}{%
@@ -2861,35 +2827,21 @@
 % 图注、表注使用 `\figurenote` 或 `\tablenote` 命令，与 `apa7.cls` 一致。
 % 图注采用宋体 11pt，单倍行距，段前6磅，段后0磅。
 % 多个图注则须顺序编号，注序左缩进2字，与注文之间空一字符，续行悬挂缩进左对齐，两端对齐。
-\newcommand\ustc@figure@note@font{%
-  \ifustc@degree@bachelor
-    \ifustc@language@chinese
-      \fontsize{10.5bp}{13.65bp}\selectfont
-    \else
-      \fontsize{10.5bp}{12.075bp}\selectfont
-    \fi
-  \else
-    \ustc@caption@font
-  \fi
-}
+\let\ustc@figure@note@font\ustc@caption@font
+
 \newcommand\figurenote[1]{%
-  \par
   \begingroup
-    \setlength\parskip{6bp}%
-    \ustc@figure@note@font
-    % 参考 `\@makecaption` 的实现
-    \sbox\@tempboxa{#1}%
-    \ifdim \wd\@tempboxa >\hsize
-      \parbox{\linewidth}{#1\par}%
-    \else
-      \global \@minipagefalse
-      \hb@xt@\hsize{\hfil\box\@tempboxa\hfil}%
-    \fi
-    \par
+    \captionsetup{
+      font = ustc,
+      margin = {2em, 0pt},
+      oneside,
+    }%
+    \caption*{#1}
   \endgroup
 }
 \let\tablenote\figurenote
 
+% 兼容旧版的 `\note` 命令。
 \newcommand\note[1]{%
   \ustc@deprecated{'\protect\note' command}{2025-01-05}{'\protect\figurenote'}%
   \figurenote{#1}%
@@ -2990,7 +2942,7 @@
   \newcommand\bibstyle@authoryear{\bibpunct{(}{)}{;}{a}{,}{,}}
   \@namedef{bibstyle@author-year}{\bibstyle@authoryear}
   %
-  % 几种种引用样式，与 \file{bst} 文件名保持一致，
+  % 几种引用样式，与 \file{bst} 文件名保持一致，
   % 这样在使用 \cs{bibliographystyle} 选择参考文献表的样式时也会设置对应的引用样式。
   \@namedef{bibstyle@ustcthesis-numerical}{\bibstyle@super}
   \@namedef{bibstyle@ustcthesis-authoryear}{\bibstyle@authoryear}
@@ -3596,10 +3548,6 @@
 \AtEndOfPackageFile*{nomencl}{
   \let\nomname\ustc@notation@name
   \def\thenomenclature{%
-    \ifustc@degree@graduate
-      \cleardoublepage
-      \pagestyle{headings}%
-    \fi
     \ustc@chapter{\ustc@notation@name}%
     \nompreamble
     \list{}{%
@@ -3611,10 +3559,6 @@
   \def\endthenomenclature{%
     \endlist
     \nompostamble
-    \ifustc@degree@graduate
-      \clearpage
-      \pagestyle{plain}%
-    \fi
   }
 }
 

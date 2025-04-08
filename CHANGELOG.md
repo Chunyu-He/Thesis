@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.0.0-beta.7] - 2025-04-07
+
 ### Added
 
 - 新增 `eqn-paren-style` 控制中文数学公式的编号（`\eqref`）使用全角或半角括号（[#420](https://github.com/ustctug/ustcthesis/issues/420)）。
@@ -19,17 +21,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 封面的横向页边距改为 3.17 cm（[#424](https://github.com/ustctug/ustcthesis/issues/424)）。
 - 更新封面的格式（[#438](https://github.com/ustctug/ustcthesis/issues/438)）。
 - 更新原创性和授权使用声明的格式。
-- 数学式的改为段前6磅、段后6磅（研究生院 2025-03-12 Word 模板）。。
+- 数学式的改为段前6磅、段后6磅（研究生院 2025-03-12 Word 模板）。
 - 图表标题的对齐方式改为 `centerlast`（两端对齐、末行居中）（[#442](https://github.com/ustctug/ustcthesis/issues/442)）。
+- 英文摘要改为悬挂缩进 2 em（研究生院 2025-03-12 Word 模板）。
+- 英文关键词改为悬挂缩进 6.5 em（研究生院 2025-03-12 Word 模板）。
 
 ### Fixed
 
 - 修正复数 Practice supervisors 的拼写（[#431](https://github.com/ustctug/ustcthesis/pull/431)）。
 - 修正英文摘要的缩进为 1 em（[#434](https://github.com/ustctug/ustcthesis/pull/434)）。
+- 修正图注和表注格式。
 
 ### Removed
 
 - 移除封面的“专业/工程学位类型”（[#427](https://github.com/ustctug/ustcthesis/issues/427#issuecomment-2714402725)）。
+- 移除研究生的三级以下节标题的设置（[#445](https://github.com/ustctug/ustcthesis/issues/445)）。
 
 ## [4.0.0-beta.6] - 2025-02-25
 
@@ -411,7 +417,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 优化图注、算法的行距。
 - 二级以下节标题编号下采用“1.”、“(1)”、“①”。
 
-[Unreleased]: https://github.com/ustctug/ustcthesis/compare/v4.0.0-beta.6...HEAD
+[Unreleased]: https://github.com/ustctug/ustcthesis/compare/v4.0.0-beta.7...HEAD
+[4.0.0-beta.7]: https://github.com/ustctug/ustcthesis/compare/v4.0.0-beta.6...v4.0.0-beta.7
 [4.0.0-beta.6]: https://github.com/ustctug/ustcthesis/compare/v4.0.0-beta.5...v4.0.0-beta.6
 [4.0.0-beta.5]: https://github.com/ustctug/ustcthesis/compare/v4.0.0-beta.4...v4.0.0-beta.5
 [4.0.0-beta.4]: https://github.com/ustctug/ustcthesis/compare/v4.0.0-beta.3...v4.0.0-beta.4
