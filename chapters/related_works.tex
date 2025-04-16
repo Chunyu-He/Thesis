@@ -69,12 +69,14 @@
   \label{eq:6}
     N_{s} = T_{given} f_s = \frac{T_{given} I_s}{CV_{th}}
 \end{equation}
+
 由此可知一定时间内发放脉冲的数量和场景光强成正比。
 对于相机而言，成像的动态范围是其重要参数之一，决定了其能够测量的最高/低亮度的比值。根据动态范围计算公式
 \begin{equation}
   \label{eq:7}
     DR = 20 \log_{10} \frac{L^{max}}{L^{min}}
 \end{equation}
+
 其中$L_{max}$和$L_{min}$分别为相机能够测量的最高亮度和最低亮度，$DR(Dynamic Range)$为动态范围。将其带入脉冲相机中得到脉冲相机动态范围计算公式
 \begin{equation}
   \label{eq:8}
@@ -88,6 +90,12 @@
 \section{压缩感知图像重建算法研究现状}
 \subsection{压缩感知理论发展概述}
 
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{cs_principle.png}
+  \caption{压缩感知框架}
+  
+\end{figure}
 得益于21世纪以来计算机硬件条件的大幅提升和先进的机器学习算法的快速发展，计算机视觉的现实应用日益蓬勃，其解决问题的思路是：
 \begin{enumerate}
   \item 获取各种形式（特定视角，特定数量，特定环境条件，特定设备，特定数据格式等）的目标任务涉及对象的视觉信息
@@ -97,18 +105,88 @@
 \end{enumerate}
 
 
-但由于现实环境的时间空间充满不可量化的无穷变化，第一步为解决特定问题而准备的数据规模在不断膨胀，如果不加以处理很可能会超出计算机硬件的处理能力，导致算法无法收敛。这就要求科研工作者在数据数量和数据质量之间做出权衡。应运而生的，数据压缩感知算法在2006年被David L. Donoho等人首次提出\citep{David_compress,An_Introduction_To_Compressive_Sampling,Extensions_of_compressed_sensing},其主要思想是突破奈奎斯特采样定理，解决传统数据必须先采样后压缩的弊端，通过在采样时即采用稀疏矩阵对原数据进行稀疏化，使得原信号或信号在某个变换域上稀疏，用向量的语言表述则是使向量中尽可能多的元素为0从而减少数据量。然后通过采样矩阵将原高维信号投影到低维空间． 压缩感知相较于传统先采样后压缩的方式而言, 可以通过稀疏矩阵和采样矩阵结合为压缩矩阵，来实现采样和压缩同时进行。这样既降低硬件设备的要求, 又节约数据在传输和运算过程中的所需带宽。这是其在数据压缩层面的主要贡献。而将其应用到图像重建上，则实现了图像信息的投射变换和降维，寻找图像分解的变换基，从而在变换中将内在特征不同的图像信息和噪声信息区别开来，DCT变换\cite{DCT}就是一种图片从空间域变换至频域的算法，通过删除高频信息实现了图像本征信息的保留和压缩。这是其在图像去噪，去模糊等方向上的贡献。
+但由于现实环境的时间空间充满不可量化的无穷变化，第一步为解决特定问题而准备的数据规模在不断膨胀，如果不加以处理很可能会超出计算机硬件的处理能力，导致算法无法收敛。这就要求科研工作者在数据数量和数据质量之间做出权衡。应运而生的，数据压缩感知算法在2006年被David L. Donoho等人首次提出\citep{David_compress,An_Introduction_To_Compressive_Sampling,Extensions_of_compressed_sensing},其主要思想是突破奈奎斯特采样定理，解决传统数据必须先采样后压缩的弊端，通过在采样时即采用稀疏矩阵对原数据进行稀疏化，使得原信号或信号在某个变换域上稀疏，用向量的语言表述则是使向量中尽可能多的元素为0从而减少数据量。然后通过采样矩阵将原高维信号投影到低维空间． 压缩感知相较于传统先采样后压缩的方式而言, 可以通过稀疏矩阵和采样矩阵结合为压缩矩阵，来实现采样和压缩同时进行。这样既降低硬件设备的要求, 又节约数据在传输和运算过程中的所需带宽。这是其在数据压缩层面的主要贡献。而将其应用到图像重建上，则实现了图像信息的投射变换和降维，寻找图像分解的变换基，从而在变换中将内在特征不同的图像信息和噪声信息区别开来，DCT变换\cite{DCT}，快速傅里叶变换等将图片从空间域变换至频域的算法，通过删除高频信息实现了图像本征信息的保留和压缩。这是其在图像去噪，去模糊等方向上的贡献。如图\ref{fig:FFT_IMAGE}所示，经过快速傅里叶变换后图像整体视觉信息大部得到保留，图像的浅色部分代表的高频信息的损失只产生了可以被人眼接受并在识别允许范围内的噪声。这充分体现了图片信息的冗余性。
 
+
+\begin{figure}[htbp]
+    \centering
+    % 第一行图片
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{original_image_skimage.jpg}
+        \caption{原始图像}
+        \label{fig:sub1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{fourier_transform_skimage.jpg}
+        \caption{FFT转换后的频谱}
+        \label{fig:sub2}
+    \end{subfigure}
+
+    % 第二行图片
+    \vskip\baselineskip
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{filtered_spectrum_skimage.jpg}
+        \caption{滤去高频后的频谱}
+        \label{fig:sub3}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{inverse_fourier_transform_skimage.jpg}
+        \caption{过滤后逆变换所得图像}
+        \label{fig:sub4}
+    \end{subfigure}
+    \caption{将原始图像通过快速傅里叶变换，高频率波谱去除，再进行逆傅里叶变换得到的图像}
+    \label{fig:FFT_IMAGE}
+\end{figure}
+
+% ... existing code ...
 \subsection{压缩感知理论数学表述}
 压缩感知用于图像重建分为三个主要模块：
 \begin{enumerate}
-  \item 信号的稀疏化表示
   \item 观测矩阵的设计
+  \item 信号的稀疏化表示
   \item 图像信息从稀疏代码的重构
 \end{enumerate}
 
-第一步信号稀疏化表示数学公式如下
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{cs_principle_image.png}
+  \caption{观测值，原始值和稀疏代码}
+  
+\end{figure}
+第一步观测矩阵的设计数学表达如下
 \begin{equation}
   \label{eq:9}
   y = \Phi x
 \end{equation}
+
+其中$y \in R^{M \times 1}$为压缩感知的观测值，是对真实信号的一种采样，$x \in R^{N \times 1}$为原始图像信号。这里对x进行拉平处理，将一般情况下的二维图像信号拉平为一维信号便于数学处理。$\Phi \in R^{M \times N}$是测量矩阵，其作用是对原始图像信号进行采样。在此公式中，压缩比例为$\frac{M}{N}$。且为了保证且为了突破传统的奈奎斯特采样定律，需要选择合适的测量矩阵使得 $M \ll N$。在这个阶段，压缩本身是无损的。而之所以能够突破这个采样定律，是因为这个定律是建立在周期性的连续信号等间距采样上的，且没有对原始信号进行其他域上的变换。对于图像这样非周期性的数据，奈奎斯特采样是不足以充分描述和应用的。用非等间距采样例如随即亚采样往往能更好的体现出图像各个部分信息类型、密度不均匀的性质。更进一步地，为了从远小于未知解的方程个数中还原出原图像，还应该保证RIP(Restricted Isometry Property)\cite{The_restricted_isometry_property_and_its_implications_for_compressed_sensing}条件，使得信号在K稀疏的条件下可以从M个参数中得到最优解。
+
+第二步信号的稀疏化表示的数学表达如下
+\begin{equation}
+  \label{eq:10}
+  x = \Psi a
+\end{equation}
+
+其中x为公式\ref{eq:9}中的原始图像信号。在真实世界的普通摄像设备对常规物体拍摄的二维图像中，图像在空间上具备较强的相关性。且图像的像素排列表示并不满足稀疏条件，不存在大量值为0的元素，因此在这一步中通过设计合适的稀疏矩阵$\Psi \in R^{N \times N}$
+将x变化为转换域上的信号$a \in R^{N \times 1}$。如果a向量中有K个非零元素，则称a向量为K稀疏向量。在2008年Bananiuk等人\cite{Compressive_sensing_[Lecture_Notes]}解决了RIP问题易于定义不便寻找的问题，提出了RIP的等价定义，即$\Phi$与$Psi$之间彼此不相关，相关性定义如下：
+
+\begin{equation}
+  \label{eq:11}
+  \mu(\phi, \psi) = \sqrt{n} \cdot \mathop{\max}_{1 \leq k,j \leq n} |<\phi_k,\psi_j>| \Rightarrow \mu(\phi, \psi) \in \left[ 1,\sqrt{n}  \right]
+\end{equation}
+
+其中$\mu(\phi, \psi)$越接近于1，则越不相关。将\ref{eq:9}与\ref{eq:10}联立有优化问题如下
+
+\begin{equation}
+  \label{eq:12}
+  \min \Vert a \Vert_0 \quad \text{s.t.} \quad y = \Phi x = \Phi \Psi a
+\end{equation}
+
+第三步图像信息从稀疏代码的重构即是将优化所得结果a代回\ref{eq:10}则可求出原始信号x。但是考虑到$\Phi \in R^{M \times N}$ 且  $M \ll N$，那么上述优化问题是一个NP难问题，无法直接求解。需要将公式进行改造以转换为凸优化问题或者采用贪婪算法进行近似求解。
+
