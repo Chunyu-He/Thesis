@@ -222,8 +222,8 @@
 \begin{figure}[ht]
   \centering
   \includegraphics[width=\textwidth]{different_norm.png}
-  \label{fig:differnet_norm}
   \caption{不同范数约束项对优化函数的影响}
+  \label{fig:different_norm_fig}
 \end{figure}
 
 % 在需要插入公式的位置添加以下代码
@@ -236,30 +236,61 @@
     \label{eq:different_norm}
 \end{equation}
 
-在上述公式\ref{eq:different_norm}中，$\Vert \Theta x - y \Vert_2^2$是数据保真项，使得最终结果的整体趋势是使得$\Theta x$尽可能地靠近$y$，而后面的$\lambda \Vert \Psi a \Vert_m(m\in N)$作为约束项，为整个公式添加在优化过程中保证稀疏代码的稀疏度的约束。在实践之中，不同范数的约束可形象地表示为图\ref{fig:different_norm}。特别的，针对最常用的l1范数和l2范数约束项，经实验有图\ref{fig:l1_and_l2_norm}结果，表明l2范数约束项在确保稀疏代码稀疏度上效果不如l1。这从图\ref{fig:differnet_norm}中可以看出，当数据保真项所代表的直线沿着法线方向移动时，l1范数可以确保其在与约束项代表的中央图形接触时，总能够保证唯一的交叉点，根据凸函数性质其即是全局最优点。而在l2范数中，寻找唯一切点的迭代过程是复杂而不确定的，往往会得到两个交点，而无论其中的哪一个都不是最优解。而从范数自身定义考虑，l1范数是稀疏代码所有项绝对值之和，而l2范数是稀疏代码所有项绝对值的开方，后者对于绝对值较大的项相较于前者有放大作用，使得靠近零的项的作用体现较弱，不利于收敛。
 \begin{figure}[ht]
   \centering
   \includegraphics[width=\textwidth]{l1_and_l2_norm.png}
-  \label{fig:l1_and_l2_norm}
   \caption{l1和l2范数对所得稀疏代码的影响}
+  \label{fig:l1_and_l2_norm}
 \end{figure}
+在上述公式\ref{eq:different_norm}中，$\Vert \Theta x - y \Vert_2^2$是数据保真项，使得最终结果的整体趋势是使得$\Theta x$尽可能地靠近$y$，而后面的$\lambda \Vert \Psi a \Vert_m(m\in N)$作为约束项，为整个公式添加在优化过程中保证稀疏代码的稀疏度的约束。在实践之中，不同范数的约束可形象地表示为图\ref{fig:different_norm_fig}。特别的，针对最常用的l1范数和l2范数约束项，经实验有图\ref{fig:l1_and_l2_norm}结果，表明l2范数约束项在确保稀疏代码稀疏度上效果不如l1。这从图\ref{fig:different_norm_fig}中可以看出，当数据保真项所代表的直线沿着法线方向移动时，l1范数可以确保其在与约束项代表的中央图形接触时，总能够保证唯一的交叉点，根据凸函数性质其即是全局最优点。而在l2范数中，寻找唯一切点的迭代过程是复杂而不确定的，往往会得到两个交点，而无论其中的哪一个都不是最优解。而从范数自身定义考虑，l1范数是稀疏代码所有项绝对值之和，而l2范数是稀疏代码所有项绝对值的开方，后者对于绝对值较大的项相较于前者有放大作用，使得靠近零的项的作用体现较弱，不利于收敛。
+
+\subsection{基于先验知识的传统压缩感知重建方法}
 
 传统压缩感知算法主要有基追踪算法(BP)、内点法(IPM)、梯度投影
 法(GPSR)  、 迭代阈值法(ISTA) 和交替方向
 乘子法(ADMM)  等． 常见的贪婪算法有匹配追
 踪算法(MP) 、 正交匹配追踪算法(OMP)  和压
-缩采样匹配追踪算法(CoSaMP) 。其中对比详见表
+缩采样匹配追踪算法(CoSaMP) 。其中对比详见表\ref{tab:reconstruction_methods}。
 
-\begin{table}
+
+\begin{table}[htbp]
+\centering
+\caption{传统基于先验知识的压缩感知重建方法及典型的实现算法}
+\label{tab:reconstruction_methods}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{cm{3cm}m{3cm}c} % 使用 m{宽度} 使内容垂直居中，删除类别列
+\toprule
+方法 & 算法 & 年份 & 特点分析 \\
+\midrule
+\multirow{4}{*}{\centering 凸松弛方法} & BP\cite{chen1998atomic} & 1998 & \multirow{4}{*}{\centering 有理论保证,计算复杂度高} \\
+& IPM\cite{monteiro1998interior} & 1998 &  \\
+& GPSR\cite{recknagel2011gradient} & 2011 &  \\
+& ISTA\cite{beck2009fast} & 2009 &  \\
+\cline{2-4}
+\multirow{3}{*}{\centering 贪婪匹配追踪方法} & MP\cite{mallat1993matching} & 1993 & \multirow{3}{*}{\centering 无理论保证,实现简单,速度较快} \\
+& OMP\cite{pati1993orthogonal} & 1993 &  \\
+& CoSaMP\cite{needell2009cosamp} & 2009 &  \\
+\cline{2-4}
+\multirow{2}{*}{\centering 贝叶斯类方法} & BCS\cite{baraniuk2008bayesian} & 2008 & \multirow{2}{*}{\centering 利用参数的先验信息,有鲁棒性} \\
+& BCS - LP\cite{rauhut2010sparse} & 2010 &  \\
+\bottomrule
+\end{tabular}
+}
+\end{table}    
+
+凸松弛方法上述已经说明，核心思想是将公式\ref{eq:12}最小 l0 范数问题在一定条
+件下等价地转化为求解最小 l1 范数问题。贪婪匹配追踪方法是在每次迭代时，通过计算残差与原子的内积，选择局部最优原子，再计算该原子系数，逐步近似原始信号。这种方法并不能够确保得到最优信号。而贝叶斯类方法由先验知识得到信号的先验概率密度分布函数，然后用最大后验概率估计，对重构值的误差范围进行估计，进而重构出原始信号。贝叶斯方法考虑信号观测时引入的噪声，通过噪声的先验概率密度分布和最大后验概率估计，得到噪声的最大估计值。在做先验概率密度分布时，通常使用拉普拉斯分布、伽马分布等概率分布函数，或者使用相关向量机算法做先验分析，再用高斯分布模拟噪声环境。贝叶斯类重建方法的重建精度和时间复杂度介于凸松弛方法和贪婪匹配追踪方法之间，因其加入了噪声的重建，比贪婪匹配追踪算法的重建结果更优，比凸松弛方法具有更低的计算复杂度。
+
+基于先验知识的重建方法优点在于它们基于可解释的先验知识并且便于理解，而且当基于 l0 范数最小的重建问题转换并建模为凸优化问题求解时有理论收敛保证。然而这些使用信号先验知识的方法应用于实时图像压缩感知问题时存在运算速度过慢，未利用信号本身的特征的问题。
+
+\subsection{基于深度学习的压缩感知重建方法}
+近年来研究人员意识到大批量数据自身内部的数据特征未被合理利用的现实和这个现实可能对压缩感知效果的巨大提升，采用数据驱动的深度学习算法，以神经网络的形式取代了原有的先验知识模型。在信号重建方面，深度学习方法具有强大的非线性映射能力。传统的压缩感知重建算法如上述的凸优化或贪婪算法，计算复杂度高且在复杂信号情况下重建效果不佳。而深度学习通过构建深度神经网络，如卷积神经网络（CNN）和循环神经网络（RNN），可以自动学习信号的特征和分布，从而实现高效准确的信号重建。例如，在图像压缩感知中，CNN 能够捕捉图像的局部特征和纹理信息，通过端到端的训练，直接从压缩测量值中恢复出高质量的图像。
+
+\begin{figure}[ht]
   \centering
-  \caption{Spike Camera的各项详细参数}
-  \label{tab:spike_camera_parameter}
-  \begin{tabular}{ccc}
-    \toprule
-    Spike Camera & -Gen1\cite{dong2018spike}&-Gen3\cite{Huang_Tiejun110} \\
-    \midrule
-    年份 &2018&2020 \\
-    
-    \bottomrule
-  \end{tabular}
-\end{table}
+  \includegraphics[width=\textwidth]{dnn_cs.png}
+  \caption{深度神经网络用于压缩感知的整体结构和现实映射\cite{Practical_compact_deep_compressed_sensing}}
+  \label{fig:dnn_cs}
+\end{figure}
+
+上图\ref{dnn_cs}展示了深度神经网络在压缩感知中的整体结构。首先原始图片x经过采样子网得到观测值y，子网可以采取不同的采样方式，如随机采样、均匀采样、高斯采样等。然后将观测值y输入到初始化子网中，初步得到重建图像$\hat{x_init}$。这一步可以采用随机矩阵，但通过合理的设计和初始值的估计可以达到逼近原始图像的效果，节省网络收敛的时间。最后，通过重建网络的深度展开迭代，减小重建误差，最终得到该数据集训练出的网络和重建结果$\hat{x}$。对应到硬件设计上，通过(b)中所展示的不同微透镜阵列实现不同模式的采样矩阵，用M个单独的调制模式（每个模式对应于大小为 H × W 的矩阵行），以单独加载到特定的空间光调制器 （SLM） 上，实现单独采样。
