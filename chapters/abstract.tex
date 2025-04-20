@@ -7,16 +7,26 @@
 
 \begin{abstract}
   在当下日益蓬勃的高速摄像领域，脉冲相机得益于异于传统曝光-读取的旧式光处理手段，采用持续对光子进行捕捉积累发放脉冲的新范式，在超高速动态场景捕捉任务中表现出在时间分辨率上相较传统相机的巨大优势。
-  脉冲相机以最高等效 40000 赫兹的发射速率异步记录视觉信息，通过二进制脉冲流对场景亮度的变化进行特化编码。
+  脉冲相机以最高等效 4万 赫兹的发射速率异步记录视觉信息，通过二进制脉冲流对场景亮度的变化进行特化编码。
   但是在机器友好的脉冲流向人类友好的图片进行重建的过程中，由于脉冲相机的超高速采样特性和环境不利因素的复杂影响带来多因噪声，从脉冲输入流高效地重建高质量图像面临着重大挑战。
   
-  受到压缩感知理论的启发，我对脉冲积累的底层原理应用深度展开网络，设计了一个轻量级且可解释的脉冲重建网络。进一步地，通过多重曝光信息交流，在保证参数量和模型复杂度不变的前提下最大程度的利用时间相关和空间相关。
-  实验结果表明，我们的方法在大多数定量指标上超过了现有的最先进方法，而其参数规模、延迟和计算负载仅分别为现有方法的 12\%、21\% 和 40\%。且重建图像在纹理细节，整体结构上尽可能地趋近于原始高清图片，展现了细节恢复的卓越性能。在现有数据集上训练后模型也展现了良好的泛化能力，为脉冲重建和压缩感知结合开辟了研究的新思路。
+  受到压缩感知理论的启发，本文对脉冲积累的底层原理应用深度展开网络，设计了一个轻量级且可解释的脉冲重建网络。进一步地，通过多重曝光信息交流，在保证参数量和模型复杂度不变的前提下最大程度的利用时间相关和空间相关。
+
+  本文的主要贡献点包括：
+  \begin{enumerate}
+    \item 本文设计了一种新型的基于脉冲流的压缩感知重建网络，在参数规模、延迟和计算负载方面均大幅优于现有方法，并且重建图像仍然保有丰富纹理信息。
+    \item 本文将多重曝光概念引入网络，解决了其他基于脉冲流的压缩感知网络没有利用脉冲流本身的时空相关性的问题。这为脉冲重建和压缩感知结合开辟了研究的新思路。
+  \end{enumerate}
 
 \end{abstract}
 
 \begin{abstract*}
-  In the increasingly booming field of high-speed photography nowadays, spike cameras, benefiting from a novel optical processing approach that differs from the traditional exposure-readout method, adopt a new paradigm of continuously capturing and accumulating photons and then emitting spikes. They exhibit a significant advantage in temporal resolution over traditional cameras in the task of capturing ultra-high-speed dynamic scenes. Spike cameras record visual information asynchronously at a maximum equivalent emission rate of 40,000 Hz, and specially encode the changes in scene brightness through a binary spike stream. However, during the process of reconstructing machine-friendly spike streams into human-friendly images, due to the ultra-high-speed sampling characteristics of spike cameras and the complex influence of unfavorable environmental factors that introduce multi-causal noise, efficiently reconstructing high-quality images from the spike input stream poses significant challenges.
-  
-  Inspired by the theory of compressive sensing, we apply a deep expansion network to the underlying principles of spike accumulation and design a lightweight and explainable spike reconstruction network. Furthermore, through the exchange of multi-exposure information, we maximize the utilization of temporal and spatial correlations while ensuring that the number of parameters and model complexity remain unchanged. Experimental results show that our method surpasses existing state-of-the-art methods in most quantitative metrics, while its parameter size, latency, and computational load are only 12\%, 21\%, and 40\% of those of existing methods, respectively. Moreover, the reconstructed images approach the original high-definition images as closely as possible in terms of texture details and overall structure, demonstrating excellent performance in detail restoration. After being trained on existing datasets, the model also exhibits good generalization ability, opening up new research ideas for the combination of spike reconstruction and compressive sensing.  
+  In the current booming field of high-speed photography, spike cameras benefit from the old light processing method that is different from the traditional exposure-readout. They adopt a new paradigm of continuously capturing, accumulating and emitting spikes of photons, which shows great advantages in temporal resolution over traditional cameras in ultra-high-speed dynamic scene capture tasks. spike cameras asynchronously record visual information at a maximum equivalent emission rate of 40k Hz, and specifically encode changes in scene brightness through binary spike streams. However, in the process of reconstructing machine-friendly spike streams into human-friendly pictures, due to the ultra-high-speed sampling characteristics of spike cameras and the complex influence of unfavorable environmental factors that bring multi-cause noise, it is a major challenge to efficiently reconstruct high-quality images from spike input streams.
+
+Inspired by the theory of compressed sensing, this paper applies a deep unfolding network to the underlying principle of spike accumulation and designs a lightweight and interpretable spike reconstruction network. Furthermore, through the exchange of multiple exposure information, the temporal correlation and spatial correlation are maximized while ensuring that the number of parameters and model complexity remain unchanged. The main contributions of this paper include:
+\begin{enumerate}
+  \item This paper designs a new type of compressed sensing reconstruction network based on spike flow, which is much better than existing methods in terms of parameter scale, delay and computational load, and the reconstructed image still retains rich texture information.
+  \item This paper introduces the concept of multiple exposures into the network, solving the problem that other compressed sensing networks based on spike flow do not utilize the spatiotemporal correlation of the spike flow itself. This opens up new research ideas for the combination of spike reconstruction and compressed sensing.
+\end{enumerate}
+
 \end{abstract*}

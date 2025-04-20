@@ -1,0 +1,32 @@
+\begin{table}[htbp]
+  \centering
+  \caption{基于深度学习的压缩感知重建方法及典型的实现算法}
+  \label{tab:reconstruction_methods_deeplearning}
+  \resizebox{\textwidth}{!}{
+    \begin{tabular}{ccccccc}
+      \toprule
+      方法                                                  & 年份  & 传感网络类型             & 是否可训练 & 传感网络参数量  & 迭代算法        & 总参数量  \\
+      \midrule
+      ReconNet                             & 2016  & \multirow{5}{*}{块状对角高斯矩阵} & \multirow{5}{*}{否} & \multirow{5}{*}{0} & -               & 0.62      \\
+      ISTA-Net$^{+}$                       & 2018  &                                 &                   &                   & ISTA & 0.34    \\
+      DPA-Net                               & 2020  &                                 &                   &                   & -               & 9.31      \\
+      MAC-Net                               & 2021  &                                 &                   &                   & -               & 6.12      \\
+      ISTA-Net$^{++}$                    & 2019  &                                 &                   &                   & PGD   & 0.76      \\
+      \cline{1-2}\cline{5-7}
+      CSNet$^{+}$                             & 2019  & \multirow{8}{*}{块状对角可学习矩阵} & \multirow{8}{*}{是} & 1.05          & -               & 1.46      \\
+      SCSNet                                 & 2020  &                                 &                   & 1.05          & -               & 1.64      \\
+      OPINE-Net$^{+}$                     & 2021  &                                 &                   & 1.19          & ISTA            & 1.10      \\
+      AMP-Net                               & 2021  &                                 &                   & 1.05          & AMP   & 1.71      \\
+      COAST                                   & 2021  &                                 &                   & 1.19          & PGD   & 1.60      \\
+      MADUN                                   & 2021  &                                 &                   & 1.19          & PGD   & 3.60      \\
+      FSOINet                               & 2022  &                                 &                   & 1.05          & PGD   & 1.06      \\
+      CASNet                                 & 2022  &                                 &                   & 1.05          & PGD   & 16.90     \\
+      \cline{1-2}\cline{5-7}
+      RK-CCSNet                           & 2020  & \multirow{2}{*}{堆栈网络}     & \multirow{2}{*}{是} & 0.11          & -               & 0.74      \\
+      MR-CCSNet$^{+}$                     & 2022  &                                 &                   & 0.04          & -               & 14.25     \\
+      \cline{1-2}\cline{5-7}
+      PCT                                 & 2025  & COSO                 & 可                & 0.05          & PGD   & 0.82      \\
+      \bottomrule
+    \end{tabular}
+  }
+\end{table}
