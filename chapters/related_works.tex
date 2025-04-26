@@ -220,38 +220,6 @@
 
 近年来基于深度学习的压缩感知算法可以根据观测矩阵类型、是否可训练两个角度进行分类。详细分类根据\cite{Practical_compact_deep_compressed_sensing}见表：
 
-% \begin{table}[htbp]
-%   \centering
-%   \caption{基于深度学习的压缩感知重建方法及典型的实现算法}
-%   \label{tab:reconstruction_methods_deeplearning}
-%   \resizebox{\textwidth}{!}{
-%     \begin{tabular}{ccccccc}
-%       \toprule
-%       方法                                                  & 年份  & 传感网络类型             & 是否可训练 & 传感网络参数量  & 迭代算法        & 总参数量  \\
-%       \midrule
-%       ReconNet\cite{ReconNet}                             & 2016  & \multirow{5}{*}{块状对角高斯矩阵} & \multirow{5}{*}{否} & \multirow{5}{*}{0} & -               & 0.62      \\
-%       ISTA-Net$^{+}$\cite{ISTA-Net}                       & 2018  &                                 &                   &                   & ISTA\cite{beck2009fast} & 0.34    \\
-%       DPA-Net\cite{DPA-Net}                               & 2020  &                                 &                   &                   & -               & 9.31      \\
-%       MAC-Net\cite{MAC-Net}                               & 2021  &                                 &                   &                   & -               & 6.12      \\
-%       ISTA-Net$^{++}$\cite{ISTA-Net++}                    & 2019  &                                 &                   &                   & PGD\cite{PGD}   & 0.76      \\
-%       \cline{1-2}\cline{5-7}
-%       CSNet$^{+}$\cite{CSNET}                             & 2019  & \multirow{8}{*}{块状对角可学习矩阵} & \multirow{8}{*}{是} & 1.05          & -               & 1.46      \\
-%       SCSNet\cite{SCSNET}                                 & 2020  &                                 &                   & 1.05          & -               & 1.64      \\
-%       OPINE-Net$^{+}$\cite{OPINE-NET}                     & 2021  &                                 &                   & 1.19          & ISTA\cite{beck2009fast}            & 1.10      \\
-%       AMP-Net\cite{AMP-NET}                               & 2021  &                                 &                   & 1.05          & AMP\cite{AMP}   & 1.71      \\
-%       COAST\cite{COAST}                                   & 2021  &                                 &                   & 1.19          & PGD\cite{PGD}   & 1.60      \\
-%       MADUN\cite{MADUN}                                   & 2021  &                                 &                   & 1.19          & PGD\cite{PGD}   & 3.60      \\
-%       FSOINet\cite{FSOINET}                               & 2022  &                                 &                   & 1.05          & PGD\cite{PGD}   & 1.06      \\
-%       CASNet\cite{CASNET}                                 & 2022  &                                 &                   & 1.05          & PGD\cite{PGD}   & 16.90     \\
-%       \cline{1-2}\cline{5-7}
-%       RK-CCSNet\cite{RK-CCSNet}                           & 2020  & \multirow{2}{*}{堆栈网络}     & \multirow{2}{*}{是} & 0.11          & -               & 0.74      \\
-%       MR-CCSNet$^{+}$\cite{MR-CCSNet}                     & 2022  &                                 &                   & 0.04          & -               & 14.25     \\
-%       \cline{1-2}\cline{5-7}
-%       PCT\cite{Practical_compact_deep_compressed_sensing} & 2025  & COSO\cite{Practical_compact_deep_compressed_sensing}                 & 可                & 0.05          & PGD\cite{PGD}   & 0.82      \\
-%       \bottomrule
-%     \end{tabular}
-%   }
-% \end{table}
 
 \begin{table}[htbp]
   \centering
@@ -260,39 +228,39 @@
   \resizebox{\textwidth}{!}{
     \begin{tabular}{ccccccc}
       \toprule
-      方法              & 年份   & 传感网络类型                     & 是否可训练              & 传感网络参数量            & 迭代算法 & 总参数量  \\
+      方法                                                  & 年份   & 传感网络类型                                               & 是否可训练              & 传感网络参数量            & 迭代算法            & 总参数量  \\
       \midrule
-      ReconNet        & 2016 & \multirow{5}{*}{块状对角高斯矩阵}  & \multirow{5}{*}{否} & \multirow{5}{*}{0} & -    & 0.62  \\
-      ISTA-Net$^{+}$  & 2018 &                            &                    &                    & ISTA & 0.34  \\
-      DPA-Net         & 2020 &                            &                    &                    & -    & 9.31  \\
-      MAC-Net         & 2021 &                            &                    &                    & -    & 6.12  \\
-      ISTA-Net$^{++}$ & 2019 &                            &                    &                    & PGD  & 0.76  \\
+      ReconNet\cite{ReconNet}                             & 2016 & \multirow{5}{*}{块状对角高斯矩阵}                            & \multirow{5}{*}{否} & \multirow{5}{*}{0} & -               & 0.62  \\
+      ISTA-Net$^{+}$\cite{ISTA-Net}                       & 2018 &                                                      &                    &                    & ISTA\cite{ISTA} & 0.34  \\
+      DPA-Net\cite{DPA-Net}                               & 2020 &                                                      &                    &                    & -               & 9.31  \\
+      MAC-Net\cite{MAC-Net}                               & 2021 &                                                      &                    &                    & -               & 6.12  \\
+      ISTA-Net$^{++}$\cite{ISTA-Net++}                    & 2019 &                                                      &                    &                    & PGD\cite{PGD}   & 0.76  \\
       \cline{1-2}\cline{5-7}
-      CSNet$^{+}$     & 2019 & \multirow{8}{*}{块状对角可学习矩阵} & \multirow{8}{*}{是} & 1.05               & -    & 1.46  \\
-      SCSNet          & 2020 &                            &                    & 1.05               & -    & 1.64  \\
-      OPINE-Net$^{+}$ & 2021 &                            &                    & 1.19               & ISTA & 1.10  \\
-      AMP-Net         & 2021 &                            &                    & 1.05               & AMP  & 1.71  \\
-      COAST           & 2021 &                            &                    & 1.19               & PGD  & 1.60  \\
-      MADUN           & 2021 &                            &                    & 1.19               & PGD  & 3.60  \\
-      FSOINet         & 2022 &                            &                    & 1.05               & PGD  & 1.06  \\
-      CASNet          & 2022 &                            &                    & 1.05               & PGD  & 16.90 \\
+      CSNet$^{+}$\cite{CSNET}                             & 2019 & \multirow{8}{*}{块状对角可学习矩阵}                           & \multirow{8}{*}{是} & 1.05               & -               & 1.46  \\
+      SCSNet\cite{SCSNET}                                 & 2020 &                                                      &                    & 1.05               & -               & 1.64  \\
+      OPINE-Net$^{+}$\cite{OPINE-NET}                     & 2021 &                                                      &                    & 1.19               & ISTA\cite{ISTA} & 1.10  \\
+      AMP-Net\cite{AMP-NET}                               & 2021 &                                                      &                    & 1.05               & AMP\cite{AMP}   & 1.71  \\
+      COAST\cite{COAST}                                   & 2021 &                                                      &                    & 1.19               & PGD\cite{PGD}   & 1.60  \\
+      MADUN\cite{MADUN}                                   & 2021 &                                                      &                    & 1.19               & PGD\cite{PGD}   & 3.60  \\
+      FSOINet\cite{FSOINET}                               & 2022 &                                                      &                    & 1.05               & PGD\cite{PGD}   & 1.06  \\
+      CASNet\cite{CASNET}                                 & 2022 &                                                      &                    & 1.05               & PGD\cite{PGD}   & 16.90 \\
       \cline{1-2}\cline{5-7}
-      RK-CCSNet       & 2020 & \multirow{2}{*}{堆栈网络}      & \multirow{2}{*}{是} & 0.11               & -    & 0.74  \\
-      MR-CCSNet$^{+}$ & 2022 &                            &                    & 0.04               & -    & 14.25 \\
+      RK-CCSNet\cite{RK-CCSNet}                           & 2020 & \multirow{2}{*}{堆栈网络}                                & \multirow{2}{*}{是} & 0.11               & -               & 0.74  \\
+      MR-CCSNet$^{+}$\cite{MR-CCSNet}                     & 2022 &                                                      &                    & 0.04               & -               & 14.25 \\
       \cline{1-2}\cline{5-7}
-      PCT             & 2025 & COSO                       & 是                  & 0.05               & PGD  & 0.82  \\
+      PCT\cite{Practical_compact_deep_compressed_sensing} & 2025 & COSO\cite{Practical_compact_deep_compressed_sensing} & 是                  & 0.05               & PGD\cite{PGD}   & 0.82  \\
       \bottomrule
     \end{tabular}
   }
 \end{table}
 
-现有的基于深度学习的压缩感知算法产生于这样一个现实：即传统的基于先验知识的压缩感知重建方法在实际应用中对于数据的内在特征没有得到充分利用。不合适的传感矩阵设计不仅无法实现原始信号的变换稀疏，其自身的参数量也往往迅速膨胀，导致算法的运算速度过慢。深度学习算法利用多层神经网络的表示功能，直接学习从测量域到原始信号域的逆映射。ReconNet、CSNet、SCSNet、DPA-Net、RK-CCSNet和 MR-CCSNet这些方法侧重于准确性和可扩展性，并普及了许多有效的网络设计，例如分层和非局部结构。许多受优化启发的方法将传统优化算法与先进的神经网络设计有机地集成在一起，将迭代算法通过网络的形式表现出来，通过监督学习实现原始图像和重建后图像间的误差最小化来实现传统算法中凸优化、贪婪搜寻的作用。示例包括 ADMM-Net 、ISTANet、OPINE-Net、AMP-Net、MAC-Net 、COAST、ISTA-Net++、MADUN、FSOINet和 CASNet。这种范式将优化算法的截断推理展开到神经网络阶段，成为图像压缩感知重建中一个独特的范式。但是由于计算和内存/存储的限制，大多数压缩感知网络采用基于块（或块对角线）的采样方案并协作学习线性采样矩阵和恢复网络。这为该类算法带来以下两个问题：
+现有的基于深度学习的压缩感知算法产生于这样一个现实：即传统的基于先验知识的压缩感知重建方法在实际应用中对于数据的内在特征没有得到充分利用。不合适的传感矩阵设计不仅无法实现原始信号的变换稀疏，其自身的参数量也往往迅速膨胀，导致算法的运算速度过慢。深度学习算法利用多层神经网络的表示功能，直接学习从测量域到原始信号域的逆映射。ReconNet\cite{ReconNet}、CSNet\cite{CSNET}、SCSNet\cite{SCSNET}、DPA-Net\cite{DPA-Net}、RK-CCSNet\cite{RK-CCSNet}和MR-CCSNet\cite{MR-CCSNet}这些方法侧重于准确性和可扩展性，并普及了许多有效的网络设计，例如分层和非局部结构。许多受优化启发的方法将传统优化算法与先进的神经网络设计有机地集成在一起，将迭代算法通过网络的形式表现出来，通过监督学习实现原始图像和重建后图像间的误差最小化来实现传统算法中凸优化、贪婪搜寻的作用。示例包括ISTANet\cite{ISTA-Net}、OPINE-Net\cite{OPINE-NET}、AMP-Net\cite{AMP-NET}、MAC-Net\cite{MAC-Net} 、COAST\cite{COAST}、ISTA-Net++\cite{ISTA-Net++}、MADUN\cite{MADUN}、FSOINet\cite{FSOINET}和 CASNet\cite{CASNET}。这种范式将优化算法的截断推理展开到神经网络阶段，成为图像压缩感知重建中一个独特的范式。但是由于计算和内存/存储的限制，大多数压缩感知网络采用基于块（或块对角线）的采样方案并协作学习线性采样矩阵和恢复网络。这为该类算法带来以下两个问题：
 \begin{enumerate}
   \item 块采样方案\cite{Block_Compressed}无法有效地将图像信息捕获到少数几次测量中，该方案运算符仅聚合小局部图像区域的信号强度（或像素值）。然而由于感受野有限，这些采样方案在捕获图像信息方面有很大的改进空间，随着图像大小的增加此问题变得更加严重。
   \item 解释性差，没有与压缩感知理论的数学基础的对应，现有的数据驱动的压缩感知采样算子直接学习降维，而不结合有关自然信号的特定知识，通常被训练成黑盒，因此不清楚网络学习到的具体结构以及该结构如何有助于他们的采样能力。
 \end{enumerate}
 
-RK-CCSNet和MR-CCSNet为解决上述问题采用了堆栈网络结构，将算子参数量减少至基于块采样方案的算子的十分之一，但在总参数量上并未展现出显著优势。PCT针对上述算法未解决的问题，通过引入COSO采样算子将图像先验的数据驱动学习与降维过程分离，采用卷积神经网络对输入图像进行快速过滤，然后采用离散余弦变换和加扰块对角线高斯矩阵来分别捕获图像结构和细节，将块采样方案的感受野从局部提升至全局，同时具备良好的数学可解释性，具备采样运算符效率高，内存和参数开销低等优点。但是上述算法尚无在脉冲流上的应用，对于脉冲流的高度时空相关性，针对图像的算法没有相应的结构以充分利用这种相关。
+RK-CCSNet\cite{RK-CCSNet}和MR-CCSNet\cite{MR-CCSNet}为解决上述问题采用了堆栈网络结构，将算子参数量减少至基于块采样方案的算子的十分之一，但在总参数量上并未展现出显著优势。PCT针对上述算法未解决的问题，通过引入COSO\cite{Practical_compact_deep_compressed_sensing}采样算子将图像先验的数据驱动学习与降维过程分离，采用卷积神经网络对输入图像进行快速过滤，然后采用离散余弦变换和加扰块对角线高斯矩阵来分别捕获图像结构和细节，将块采样方案的感受野从局部提升至全局，同时具备良好的数学可解释性，具备采样运算符效率高，内存和参数开销低等优点。但是上述算法尚无在脉冲流上的应用，对于脉冲流的高度时空相关性，针对图像的算法没有相应的结构以充分利用这种相关。
 
 \section{脉冲相机的影像重建}
 脉冲相机影响重建的任务是从蕴含视觉信息的脉冲流中恢复出脉冲相机所采集的场景信息。直观上，脉冲的密度和场景亮度正相关，通过直接对单位时间内的脉冲进行计数即可实现对图像亮度的粗略估计。但这种粗略的估计没有利用到脉冲的时空相关性，故而在重建出的图像中往往表现出模糊、纹理丢失、伪影等图像劣化现象。通过不同的利用这种时空相关性的方式可以将现有脉冲相机影响重建分为三类，分别是基于脉冲滤波的方法，基于计算神经科学的方法和基于脉冲深度学习的方法。
@@ -311,21 +279,23 @@ RK-CCSNet和MR-CCSNet为解决上述问题采用了堆栈网络结构，将算�
   \resizebox{\textwidth}{!}{
     \begin{tabular}{lcccc}
       \hline
-      \multirow{2}{*}{方法} & \multicolumn{2}{c}{REDS模拟数据} & \multicolumn{2}{c}{PKU-Spike-High-Speed}                   \\
+      \multirow{2}{*}{方法}               & \multicolumn{2}{c}{REDS模拟数据\cite{REDS}} & \multicolumn{2}{c}{PKU-Spike-High-Speed\cite{TFP_TFI}}                                           \\
       \cline{2-5}
-                          & PSNR                         & SSIM                                     & NIQE  & BRISQUE \\
+                                        & PSNR\cite{PSNR_SSIM}                    & SSIM\cite{PSNR_SSIM}                                   & NIQE\cite{NIQE} & BRISQUE\cite{BRISQUE} \\
       \hline
-      TFP                 & 22.37                        & 0.5801                                   & 4.01  & 19.41   \\
-      TFI                 & 24.94                        & 0.7150                                   & 3.84  & 22.28   \\
-      TVS                 & 19.03                        & 0.7452                                   & 36.16 & 43.46   \\
-      STP                 & 22.37                        & 0.7300                                   & 10.90 & 43.35   \\
-      SSML                & 34.26                        & 0.9718                                   & 7.39  & 19.42   \\
-      Spk2ImgNet          & 38.44                        & 0.9767                                   & 4.94  & 28.66   \\
-      WGSE                & 38.88                        & 0.9774                                   & 7.45  & 33.57   \\
+      TFP\cite{TFP_TFI}                 & 22.37                                   & 0.5801                                                 & 4.01            & 19.41                 \\
+      TFI\cite{TFP_TFI}                 & 24.94                                   & 0.7150                                                 & 3.84            & 22.28                 \\
+      TVS                               & 19.03                                   & 0.7452                                                 & 36.16           & 43.46                 \\
+      STP\citep{STP_1,STP_2}            & 22.37                                   & 0.7300                                                 & 10.90           & 43.35                 \\
+      SSML\cite{SSML}                   & 34.26                                   & 0.9718                                                 & 7.39            & 19.42                 \\
+      Spk2ImgNet  \cite{Spike2ImageNet} & 38.44                                   & 0.9767                                                 & 4.94            & 28.66                 \\
+      WGSE\cite{WGSE}                   & 38.88                                   & 0.9774                                                 & 7.45            & 33.57                 \\
       \hline
     \end{tabular}
   }
 \end{table}
 
+\section{本章小结}
+本章对本文研究内容的相关主题进行梳理论述。首先介绍了人类系统感光原理和这种原理对脉冲相机成像原理的启发。然后介绍了脉冲相机的工作原理，解释了脉冲相机区别于传统数字相机的主要特点和解决的相应问题。进一步的，介绍了压缩感知图像重建算法的发展历史和近期现状。最后介绍了不同种类的脉冲相机影像重建算法。
 
 

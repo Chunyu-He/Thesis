@@ -1,0 +1,96 @@
+\chapter{基于压缩感知神经网络的脉冲影像重建}
+
+\section{引言}
+本章首先介绍了将脉冲流格式数据应用到压缩感知网络框架中的数学映射，然后提出了基于压缩感知神经网络的脉冲影像重建网络（Compressed Sensing for Spike Net，CSS-Net）对输入脉冲流进行特征提取和增强。过往的压缩感知算法只能够应用于离散的图片信号，对于二值的脉冲流信号没有对应的解决方式，且其数学解释性较差。本章首先提出了针对脉冲数据的压缩感知数学表示和各项网络参数的设计，在此基础上添加多窗口特征提取融合（Multi-Window Feature Extraction and Fusion，MWFEF）模块。该模块进一步的融合了不同时刻物体运动信息的时空相关性，增强了重建图像的各项指标。
+
+\section{问题定义}
+假设由脉冲相机输出（在本实验中为模拟数据集，但形制规格均与真实数据集完全等同）的脉冲流为$\boldsymbol{S}(\boldsymbol{x},t) \in \mathbb{B}^{H \times W \times T}$，其中$\boldsymbol{x} = (x,y)$，$\mathbb{B}$是二进制域。真实场景图像为$\boldsymbol{C}(\boldsymbol{x},t) $，重建场景为从$\boldsymbol{S}(\boldsymbol{x},t)$所得之重建图片为$\boldsymbol{Y}(\boldsymbol{x},t)$。基于压缩感知神经网络的脉冲影像重建目的即为最小化该数据集重建结果与真实图像即$\boldsymbol{C}(\boldsymbol{x},t) $与$\boldsymbol{Y}(\boldsymbol{x},t)$的误差。
+
+\section{网络架构}
+所提方法总体架构如图   所示。该方法首先对脉冲流进行编码，与此同时采用多窗口曝光得到以时刻$t_0$为中心的脉冲重建图像$\left\{ \boldsymbol{Y_i} \right\}_{i=1}^{N}$。编码后的脉冲流和经过卷积特征提取的图像特征并未对齐，采用Hadamard乘积使其对齐融合。经过池化层后和字典矩阵$D^T$相卷积，作为图像的稀疏代码，而脉冲流特征经过卷积之后结果作为脉冲的稀疏代码。在这之后，将上述两特征输入ISTA迭代网络，特征按照ISTA数学表达按顺序经过共享权重的卷积层，并通过模拟软阈值函数的激活层，迭代$k$次后得到最终稀疏代码后经过卷积层得到重建图像。
+
+\section{问题形式化}
+为了提取脉冲流中的时空相关性，采用TFP重建方式保证对噪声抑制的同时也通过融合多个脉冲帧之间的相关性来初步实现了运动联系。由\cite{TFP_TFI}可知，TFP重建出的图像可表示为
+\begin{equation}
+    Y = \frac{1}{T} \int_{T}^{} I(t)dt = \frac{\theta N_T}{T}
+    \label{eq:TFP}
+\end{equation}
+
+其中T表示TFP重建的时间窗口，$\theta$表示脉冲相机设置的发射阈值，$N_T$表示脉冲相机接收到的脉冲数目，由$N_T=\sum_{i=1}^{i=T} S_i$所得。$S_i$是第$i$时刻接收到的脉冲帧。经过此方法重建出的图像不可避免地具有模糊，伪影等特性。受到传统的图像去模糊\cite{Blind_Image_Deconvolution}启发，本文用模糊核$k_{blur}$统一表示作用于图像上的运动模糊和伪影。
+
+\begin{equation}
+    \begin{aligned}
+        Y(T) & = k_{blur} * C(T) +_ \epsilon \\
+             & = H(k)C + \epsilon
+        \label{eq:Blind_Image_Deconvolution}
+    \end{aligned}
+\end{equation}
+为保证公式统一性，公式\ref{eq:Blind_Image_Deconvolution}中的$k_{blur}$用卷积矩阵$H(k)$表示,并省略$C(T)$中的$T$。根据压缩感知理论，真实图像$C$可被分解为字典矩阵（也称传感矩阵）$D_C$和稀疏代码$Z_C$相乘，即
+\begin{equation}
+    C = D_CZ_C
+    \label{eq:Compressed_Sensing}
+\end{equation}
+将\ref{eq:Compressed_Sensing}代入\ref{eq:Blind_Image_Deconvolution}有
+\begin{equation}
+    Y = H(k)D_CZ_C + \epsilon
+    \label{eq:Compressed_Sensing_for_Blind_Image_Deconvolution}
+\end{equation}
+其中$\epsilon$是多因噪声。
+
+由LASSO问题通解知，最优稀疏代码可通过求解下述凸优化问题得到
+\begin{equation}
+    \mathop{\arg\min}\limits_{Z_C} ||Y-H(k)D_CZ_C||_2^2 + \lambda||Z_C||_1
+    \label{eq:LASSO_Image}
+\end{equation}
+其中$\lambda$是约束稀疏代码稀疏性的正则化参数。
+
+当最优稀疏代码业已解出，清晰图像便可通过$C = D_C Z_C$计算得到。在下文中$D_C$和$Z_C$的下标都将被省略掉，转写成$D$和$Z$形式。
+
+公式\ref{eq:LASSO_Image}是解决压缩感知重建的基本形式，而对于脉冲数据而言，将脉冲流以和图片相同的处理规律，可得：
+\begin{equation}
+    S_{\tau} = D_{\tau}Z_{\tau} + \epsilon
+    \label{eq:Compressed_Sensing_for_Spike}
+\end{equation}
+其中$\tau$表示记录脉冲流的时间窗口。值得注意的是，本实验所用数据集为模拟数据集，因此$S_{\tau}$所记录的运动信息本质上是一张图片的信息。由于压缩感知是不适定问题，可以假设脉冲流的压缩代码和真实图像的压缩代码是一致的，即$Z_{\tau} = Z$。在此种情况下求得真实图像最优压缩代码后可解$D_{\tau}$。此时脉冲压缩感知重建可表示为
+\begin{equation}
+    \mathop{\arg\min}\limits_{Z_{\tau}} ||S_{\tau}-D_{\tau}Z_{\tau}||_2^2 + \lambda||Z_{\tau}||_1
+    \label{eq:LASSO_Spike}
+\end{equation}
+
+整体上，将脉冲流$S_{\tau}$输入网络，得到重建图像。网络损失函数定义为真实图像和重建图像的误差为
+\begin{equation}
+    \mathcal{L} = ||C - \text{CSS-Net}(S_{\tau})||
+    \label{eq:Loss_Function}
+\end{equation}
+其中$C$为真实图像，$\text{CSS-Net}(S_{\tau})$为重建图像。
+
+\section{多窗口特征提取融合模块MWFEF}
+上述算法建立了脉冲流和图像之间的联系，通过利用脉冲流蕴含的运动特征引导模糊图像Y重建。但由于单张模糊图片所表示的运动信息有限，且单张图片的噪声无法通过多张图片融合抵消，在实践中表现为局部运动模糊强烈，重建指标等较差。为此本文提出了多窗口特征提取融合模块MWFEF，该模块主要实现了多窗口曝光图片的融合，对不同时间窗口长度重建出的图片的信息进行加权融合，既保留了短窗口图像信息的纹理，又利用了长窗口图像信息的相关。
+
+由公式\ref{eq:LASSO_Image}可知，单张图片可表示为卷积矩阵和压缩代码的乘积与加性噪声之和。对于多时间窗口$\left\{T_i\right\}_{i=1}^{i=N}$重建出的多张图片$\left\{Y_i\right\}_{i=1}^{i=N}$,每一张都可写作
+\begin{equation}
+    \mathop{\arg\min}\limits_{Z} ||Y_i-H_iDZ||_2^2 + \lambda||Z||_1
+    \label{eq:LASSO_Image_expand}
+\end{equation}
+
+本文的多时间窗口$\left\{T_i\right\}_{i=1}^{i=N}$选择为3至41的奇数值，且短时间窗口是长时间窗口的子集。对上述不同图片的进行加权融合得到
+\begin{equation}
+    \mathop{\arg\min}\limits_{Z} \sum_{i=1}^{n} \omega_i||Y_i-H_iDZ||_2^2 + \lambda||Z||_1 \quad
+    \label{eq:LASSO_Image_expand_fusion}
+\end{equation}
+
+对于上述经典的LASSO问题已有多种成熟的凸优化算法求解，本文通过ISTA算法求解，相较于其他算法其具有直观性和适用于深度学习网络架构的特点。
+\begin{equation}
+    \begin{aligned}
+        Z_k & = \mathcal{Soft}(Z_{k - 1} - \nabla f(Z_{k-1}))                                                                    \\
+            & = \mathcal{Soft}\left(Z_{k - 1} + \frac{1}{L}\sum_{i = 0}^{N - 1}\omega_i(H_iD)^T(Y_i - H_iDZ_{k - 1})\right)      \\
+            & = \mathcal{Soft}\left(Z_{k - 1} + \frac{D^T}{L}[\omega_0H_0^TY_0 +... + \omega_{N-1}H_{N - 1}^TY_{N - 1}]\right.   \\
+            & \quad\left.- \frac{D^T}{L}[\omega_0H_0^TH_0 +...+\omega_{N-1}H_{N - 1}^TH_{N - 1}]DZ_{k - 1}\right)\label{eq:ISTA}
+    \end{aligned}
+\end{equation}
+其中$\nabla$为梯度算子，$\mathcal{Soft}$为软阈值函数，$L$是利普西茨常数，k是在ISTA网络中迭代的次数。
+
+\section{数据集和实现细节}
+本工作在基于REDS\cite{REDS}数据集生成的模拟脉冲数据集上训练，脉冲帧空间分辨率为400\times250,。原始REDS数据集中的视频每一帧对应41帧脉冲帧。该数据集中共包括800对脉冲-清晰图像帧。
+
+本工作提出的CSS-Net网络基于PyTorch实现，并在单张NVIDIA RTX 4090 GPU上进行1000轮训练，采用Adam优化器，初始学习率为$1e^{-3}$。且当循环数到达500和900时将其学习率降低一半以有利于收敛。每个批处理的大小为2。
